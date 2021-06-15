@@ -1,0 +1,146 @@
+---
+title: "HTML Template"
+subtitle: ""
+author: "Analyst Name"
+date: "6/14/2021"
+output:
+  html_document:
+    toc: true
+    theme: flatly
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
+
+# Load your libraries and data here
+require(dplyr)
+require(tidyr)
+```
+
+```{r logo, out.width= '50%', fig.align='center', echo=FALSE}
+knitr::include_graphics("./images/CountyStat_Logo_Large.png")
+```
+
+# Getting Started
+
+For many of the basics in [RMarkdown](https://rmarkdown.rstudio.com/index.html) the RStudio introduction is very worth while. Almost every R visualization output is compatible with it.
+
+# Common Standards
+
+## Database Connections
+
+```{r dbi, eval = FALSE}
+require(DBI)
+wh_host <- Sys.getenv('WH_HOST')
+wh_db <- Sys.getenv('WH_DB')
+wh_user <- Sys.getenv('WH_USER')
+wh_pass <- Sys.getenv('WH_PASS')
+
+# Connect to the CountyStat DataWarehouse
+wh_con <- dbConnect(odbc::odbc(), driver = "{ODBC Driver 17 for SQL Server}", server = wh_host, database = wh_db, UID = wh_user, pwd = wh_pass, Trusted_Connection= "yes")
+```
+
+Always keep your credentials for the DataWarehouse in an `.env` file. An example is in this repo, but in normal circumstances this file should be in the `.gitignore` file.
+
+To use [DBI](https://dbi.r-dbi.org/) check out their documentation, but for the most part you will be using either the `dbGetQuery()` or `dbReadTable()` function.
+
+## Reading Flat Files
+
+```{r}
+
+```
+
+## Data Visualizations
+
+The easiest package for quickly creating charts and graphs in R is [ggplot2](https://ggplot2.tidyverse.org/). Once of the best resources for ggplot2 visualizations is the [Topic 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) from Selva Prabhakaran. This includes full code and examples using you can access directly from R. This site also has a good introduction to ggplot2 if you find the one from RStudio insufficient.
+
+```{r ggplot}
+require(ggplot2)
+
+g <- ggplot(mpg, aes(manufacturer)) + geom_bar(aes(fill=class), width = 0.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Histogram on Categorical Variable", 
+       subtitle="Manufacturer across Vehicle Classes",
+       caption = "EPA Fuel Economy 1999-2008") 
+
+g
+```
+
+If you are using this document as your template, that means you can create interactive visuals. The easiest way to do this with ggplot is using the [ggplotly](https://www.rdocumentation.org/packages/plotly/versions/4.9.2.1/topics/ggplotly) function from the [plotly](https://plotly.com/ggplot2/) library.
+
+```{r plotly, fig.width = 10}
+require(plotly)
+
+ggplotly(g) %>%
+  layout(annotations = list(x = 1,
+                            y = -0.28, 
+                            text = 'EPA Fuel Economy 1999-2008', 
+                            showarrow = F,
+                            xref='paper',
+                            yref='paper', 
+                            xanchor='right', 
+                            yanchor='auto', 
+                            xshift=0, 
+                            yshift=0,
+                            font=list(size=12, color = "darkgray")),
+         title = list(text = paste0('Histogram on Categorical Variable',
+                                    '<br>',
+                                    '<sup>',
+                                    'Manufacturer across Vehicle Classes',
+                                    '</sup>')))
+```
+
+Note that not all of the labels translate, [subtitles](https://datascott.com/blog/subtitles-with-ggplotly/) and [captions](https://stackoverflow.com/questions/45103559/plotly-adding-a-source-or-caption-to-a-chart) are lost and have to be added through other methods.
+
+## Colors
+
+A great resource for color palettes is [colorbrewer](https://colorbrewer2.org/), which is easy to implement in [ggplot2](https://statisticsglobe.com/scale-colour-fill-brewer-rcolorbrewer-package-r).
+
+```{r}
+g + scale_fill_brewer(palette = "Spectral")
+```
+
+## Tables
+
+The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
+
+#### DT
+
+DT has extensive [documentation](https://rstudio.github.io/DT/) showing its features. Below is the standard format for a CountyStat DT table. One of the biggest benefits to this package is the [horizontal scroll option](https://stackoverflow.com/questions/30765338/how-to-make-the-horizontal-scrollbar-visible-in-dtdatatable) and [download button](https://rstudio.github.io/DT/extensions.html) feature.
+
+```{r DT}
+require(DT)
+
+datatable(iris, 
+          caption = "Fisher's or Anderson's", 
+          rownames = F,
+          escape = F,
+          extensions = 'Buttons', 
+          options = list(
+            dom = 'Bfrtip',
+            buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+            # list(scrollX = TRUE),
+            initComplete = JS(
+              "function(settings, json) {",
+              "$(this.api().table().header()).css({'background-color': '#008080', 'color': '#fff'});",
+              "}")
+            )
+          )
+```
+
+#### kable w/ kableExtra
+
+Use the [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables. Like the `DT()` example above a standard CountyStat format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
+
+```{r kable}
+require(kableExtra)
+
+iris %>%
+  sample_n(15) %>% # Select 15 random rows
+  kbl(caption = "Fisher's or Anderson's") %>%
+  kable_styling(font_size = 12) %>%
+  row_spec(0, bold = T, background = "#008080", color = "white")
+```
+
+## Maps and Spatial Data
