@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.15)  15 JUN 2021 13:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.15)  15 JUN 2021 14:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -837,7 +837,7 @@ LaTeX Info: Redefining \nameref on input line 143.
 \c@mv@boldtabular=\count319
 LaTeX Font Info:    Font shape `T1/Carlito-LF/m/n' will be
 (Font)              scaled to size 17.28pt on input line 144.
-<./images/CountyStat_Logo_Large.png, id=52, 904.8204pt x 357.9774pt>
+<./images/CountyStat_Logo_Large.png, id=56, 904.8204pt x 357.9774pt>
 File: ./images/CountyStat_Logo_Large.png Graphic file (type png)
 <use ./images/CountyStat_Logo_Large.png>
 Package pdftex.def Info: ./images/CountyStat_Logo_Large.png  used on input line
@@ -904,119 +904,115 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 
 {c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdf
 tex.map} <./images/CountyStat_Logo_Large.png>]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 175.
-
+LaTeX Font Info:    Font shape `T1/Carlito-LF/b/n' will be
+(Font)              scaled to size 12.0pt on input line 175.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-78.
+81.
 (c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-181.
+184.
 (c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<./images/NewCountyLogo_TransBG-01.png, id=80, 361.35pt x 361.35pt>
+<./images/NewCountyLogo_TransBG-01.png, id=85, 361.35pt x 361.35pt>
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 243.
+ine 246.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [2 <./images/NewCountyLogo_TransBG-01.png>]
-<PDF-Template_files/figure-latex/sf-1.pdf, id=95, 469.755pt x 325.215pt>
+<PDF-Template_files/figure-latex/sf-1.pdf, id=101, 469.755pt x 325.215pt>
 File: PDF-Template_files/figure-latex/sf-1.pdf Graphic file (type pdf)
 <use PDF-Template_files/figure-latex/sf-1.pdf>
 Package pdftex.def Info: PDF-Template_files/figure-latex/sf-1.pdf  used on inpu
-t line 245.
+t line 248.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-LaTeX Font Info:    Font shape `T1/Carlito-LF/b/n' will be
-(Font)              scaled to size 12.0pt on input line 277.
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 287.
+ine 290.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [3 <./PDF-Template_files/figure-latex/sf-1.pdf>]
-<PDF-Template_files/figure-latex/ggplot-1.pdf, id=111, 469.755pt x 325.215pt>
+<PDF-Template_files/figure-latex/ggplot-1.pdf, id=117, 469.755pt x 325.215pt>
 File: PDF-Template_files/figure-latex/ggplot-1.pdf Graphic file (type pdf)
 <use PDF-Template_files/figure-latex/ggplot-1.pdf>
 Package pdftex.def Info: PDF-Template_files/figure-latex/ggplot-1.pdf  used on 
-input line 302.
+input line 305.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf, id=114, 469.755pt x 325
+<PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf, id=120, 469.755pt x 325
 .215pt>
 File: PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type 
 pdf)
 <use PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf 
- used on input line 318.
+ used on input line 321.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 321.
+ine 324.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [4 <./PDF-Template_files/figure-latex/ggplot-1.pdf>]
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 392.
+ine 395.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [5 <./PDF-Template_files/figure-latex/unnamed-chunk-2-1.pdf>]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 397.
+(hyperref)                than one, level fixed on input line 400.
 
-<PDF-Template_files/figure-latex/ggplot2_map-1.pdf, id=136, 469.755pt x 325.215
+<PDF-Template_files/figure-latex/ggplot2_map-1.pdf, id=143, 469.755pt x 325.215
 pt>
 File: PDF-Template_files/figure-latex/ggplot2_map-1.pdf Graphic file (type pdf)
 
 <use PDF-Template_files/figure-latex/ggplot2_map-1.pdf>
 Package pdftex.def Info: PDF-Template_files/figure-latex/ggplot2_map-1.pdf  use
-d on input line 417.
+d on input line 420.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 420.
+ine 423.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.420 \subsubsection{ggmap}\label{ggmap}}
+l.423 \subsubsection{ggmap}\label{ggmap}}
                                          ]
-<PDF-Template_files/figure-latex/ggmap-1.pdf, id=146, 469.755pt x 325.215pt>
+<PDF-Template_files/figure-latex/ggmap-1.pdf, id=152, 469.755pt x 325.215pt>
 File: PDF-Template_files/figure-latex/ggmap-1.pdf Graphic file (type pdf)
 <use PDF-Template_files/figure-latex/ggmap-1.pdf>
 Package pdftex.def Info: PDF-Template_files/figure-latex/ggmap-1.pdf  used on i
-nput line 445.
+nput line 448.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 447.
+ine 450.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [7 <./PDF-Template_files/figure-latex/ggplot2_map-1.pdf>]
 File: ./images/NewCountyLogo_TransBG-01.png Graphic file (type png)
 <use ./images/NewCountyLogo_TransBG-01.png>
 Package pdftex.def Info: ./images/NewCountyLogo_TransBG-01.png  used on input l
-ine 447.
+ine 450.
 (pdftex.def)             Requested size: 34.14113pt x 34.14113pt.
 [8 <./PDF-Template_files/figure-latex/ggmap-1.pdf>] (./PDF-Template.aux)
 Package rerunfilecheck Info: File `PDF-Template.out' has not changed.
-(rerunfilecheck)             Checksum: A6B87C5CE3B32E7BACFBABB11D8FBD28;1377.
+(rerunfilecheck)             Checksum: 5941574C286616F2DD8AA8E7B45D273B;1496.
  ) 
 Here is how much of TeX's memory you used:
- 13224 strings out of 480496
- 200001 string characters out of 5897737
- 653090 words of memory out of 5000000
- 30570 multiletter control sequences out of 15000+600000
+ 13228 strings out of 480496
+ 200051 string characters out of 5897737
+ 649090 words of memory out of 5000000
+ 30572 multiletter control sequences out of 15000+600000
  485805 words of font info for 76 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,15n,66p,9976b,427s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,15n,66p,9660b,416s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec
 .enc}{c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm
 -ts1.enc}{c:/Users/T112332/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/c
@@ -1025,10 +1021,10 @@ ts/type1/typoland/carlito/Carlito-Bold.pfb><c:/Users/T112332/AppData/Roaming/Ti
 nyTeX/texmf-dist/fonts/type1/typoland/carlito/Carlito.pfb><c:/Users/T112332/App
 Data/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/T112
 332/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on PDF-Template.pdf (8 pages, 1817876 bytes).
+Output written on PDF-Template.pdf (8 pages, 1818081 bytes).
 PDF statistics:
- 206 PDF objects out of 1000 (max. 8388607)
- 168 compressed objects within 2 object streams
- 35 named destinations out of 1000 (max. 500000)
- 132 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 215 PDF objects out of 1000 (max. 8388607)
+ 177 compressed objects within 2 object streams
+ 37 named destinations out of 1000 (max. 500000)
+ 140 words of extra memory for PDF output out of 10000 (max. 10000000)
 

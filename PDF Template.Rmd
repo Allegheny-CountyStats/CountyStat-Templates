@@ -54,6 +54,8 @@ For this report standard if other images need to be replaced with others that is
 
 # Common Standards
 
+## Loading Data
+
 ### Database Connections
 
 ```{r dbi, eval = FALSE}
@@ -136,7 +138,7 @@ g <- ggplot(mpg, aes(manufacturer)) + geom_bar(aes(fill=class), width = 0.5) +
 g
 ```
 
-## Colors
+### Colors
 
 A great resource for color palettes is [colorbrewer](https://colorbrewer2.org/), which is easy to implement in [ggplot2](https://statisticsglobe.com/scale-colour-fill-brewer-rcolorbrewer-package-r).
 
