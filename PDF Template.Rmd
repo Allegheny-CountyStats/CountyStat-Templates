@@ -148,9 +148,7 @@ g + scale_fill_brewer(palette = "Spectral")
 
 ## Tables
 
-The best function for PDF table `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
-
-The [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package greatly expands the options you have to format your `kable()` tables. Below is the standard CountyStat format, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey the message you are trying to deliver to your audience.
+The best function for PDF table `kable()`. CountyStat has a standard table format to start with. The [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package greatly expands the options you have to format your `kable()` tables. Below is the standard CountyStat format, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey the message you are trying to deliver to your audience.
 
 ```{r kable}
 require(kableExtra)
