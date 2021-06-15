@@ -1,0 +1,179 @@
+---
+title: |
+  | \leavevmode\smash{\protect\includegraphics[height=2.5cm]{./images/CountyStat_Logo_Large.png}}
+  | CountyStat PDF Template
+date: "  \n`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')`"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 1
+    extra_dependencies: ["float"]
+    fig_crop: no
+urlcolor: blue
+geometry: margin=1.75cm
+header-includes:
+  - \usepackage[sfdefault,lf]{carlito}
+  - \usepackage{fancyhdr}
+  - \usepackage{titling}
+  - \setlength{\headheight}{37.75pt}
+  - \setlength{\droptitle}{1em}
+  - \usepackage{wrapfig}
+  - \usepackage{booktabs}
+  - \usepackage{sectsty} \sectionfont{\centering}
+  - \usepackage[utf8]{inputenc}
+  - \usepackage{multicol}
+  - \newcommand{\btwocol}{\begin{multicols}{2}}
+  - \newcommand{\etwocol}{\end{multicols}}
+  - \usepackage{lscape}
+  - \newcommand{\blandscape}{\begin{landscape}}
+  - \newcommand{\elandscape}{\end{landscape}}
+---
+<!-- This is the header content --> 
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{CountyStat PDF Template}}
+\rhead{`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')` $\>$ \includegraphics[height=1.2cm]{./images/NewCountyLogo_TransBG-01.png}}
+\chead{\thepage}
+<!-- No header on TOC page --> 
+\thispagestyle{empty}
+\newpage
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
+
+# Load your libraries and data here
+require(dplyr)
+require(tidyr)
+```
+
+# Getting Started
+
+For many of the basics in [RMarkdown](https://rmarkdown.rstudio.com/index.html) the RStudio introduction is very worth while. Almost every R visualization output is compatible with it.
+
+For this report standard if other images need to be replaced with others that is fine.
+
+# Common Standards
+
+### Database Connections
+
+```{r dbi, eval = FALSE}
+require(DBI)
+
+wh_host <- Sys.getenv('WH_HOST')
+wh_db <- Sys.getenv('WH_DB')
+wh_user <- Sys.getenv('WH_USER')
+wh_pass <- Sys.getenv('WH_PASS')
+
+# Connect to the CountyStat DataWarehouse
+wh_con <- dbConnect(odbc::odbc(), 
+                    driver = "{ODBC Driver 17 for SQL Server}", 
+                    server = wh_host, 
+                    database = wh_db,
+                    UID = wh_user, 
+                    pwd = wh_pass, 
+                    Trusted_Connection= "yes")
+```
+
+Always keep your credentials for the DataWarehouse in an `.env` file. An example is in this repo, but in normal circumstances this file should be in the `.gitignore` file.
+
+To use [DBI](https://dbi.r-dbi.org/) check out their documentation, but for the most part you will be using either the `dbGetQuery()` or `dbReadTable()` function.
+
+### Reading Flat Files
+
+For flat files, `readr` will do well for most CSV's and other basic file formats, `readxl` is best for excel documents, `jsonlite` is ideal for JSON documents, and `xml2` will do if you have the unfortunate circumstance of dealing with that format.
+
+```{r}
+require(readr)
+require(readxl)
+require(jsonlite)
+require(xml2)
+```
+
+## Data Visualizations
+
+The easiest package for quickly creating charts and graphs in R is [ggplot2](https://ggplot2.tidyverse.org/). Once of the best resources for ggplot2 visualizations is the [Topic 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) from Selva Prabhakaran. This includes full code and examples using you can access directly from R. This site also has a good introduction to ggplot2 if you find the one from RStudio insufficient.
+
+```{r ggplot}
+require(ggplot2)
+
+g <- ggplot(mpg, aes(manufacturer)) + geom_bar(aes(fill=class), width = 0.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + 
+  labs(title="Histogram on Categorical Variable", 
+       subtitle="Manufacturer across Vehicle Classes",
+       caption = "EPA Fuel Economy 1999-2008") 
+
+g
+```
+
+## Colors
+
+A great resource for color palettes is [colorbrewer](https://colorbrewer2.org/), which is easy to implement in [ggplot2](https://statisticsglobe.com/scale-colour-fill-brewer-rcolorbrewer-package-r).
+
+```{r}
+g + scale_fill_brewer(palette = "Spectral")
+```
+
+## Tables
+
+The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
+
+
+### kable w/ kableExtra
+
+For PDF's [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables are your best bet. Below is a standard CountyStat format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
+
+```{r kable}
+require(kableExtra)
+
+iris %>%
+  sample_n(15) %>% # Select 15 random rows
+  kbl(caption = "Fisher's or Anderson's") %>%
+  kable_styling(font_size = 12) %>%
+  row_spec(0, bold = T, background = "#008080", color = "white")
+```
+
+# Maps and Spatial Data
+
+### Reading Data
+
+The easiest method for reading data and mapping in either `ggplot2`, `ggmap` or `leaflet` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+
+```{r sf}
+require(sf)
+
+munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
+
+plot(munis)
+```
+
+### Census Data
+
+The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
+
+```{r tidycensus}
+require(tidycensus)
+
+census_api_key(Sys.getenv("census"))
+
+v19 <- load_variables(2019, "acs5", cache = TRUE)
+
+alco_muni_pop <- get_acs("county subdivision", state = 'PA', county = 'Allegheny', year = 2019, variables = 'B01003_001', geometry = T)
+```
+
+### ggmap
+
+[ggmap](https://github.com/dkahle/ggmap) works if you are not trying to have interactive elements. Like leaflet the `Stamen.Toner` base map is suggested. You can use `plotly` on a typical `geom_sf`, but in most cases `leaflet` is a better option.
+
+```{r ggmap}
+require(ggmap)
+require(ggthemes)
+
+bbox <- st_bbox(munis)
+bbox_trans <- c(left = bbox[[1]], bottom = bbox[[2]], right = bbox[[3]], top = bbox[[4]])
+
+get_stamenmap(bbox_trans, maptype = "toner-lite") %>% 
+  ggmap() +
+  theme_map() +
+  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE) +
+  scale_fill_gradient(low = '#efedf5', high = '#3f007d')
+```
