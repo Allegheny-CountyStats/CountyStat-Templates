@@ -28,7 +28,9 @@ For many of the basics in [RMarkdown](https://rmarkdown.rstudio.com/index.html) 
 
 # Common Standards
 
-## Database Connections
+## Loading Data
+
+### Database Connections
 
 ```{r dbi, eval = FALSE}
 require(DBI)
@@ -46,13 +48,44 @@ Always keep your credentials for the DataWarehouse in an `.env` file. An example
 
 To use [DBI](https://dbi.r-dbi.org/) check out their documentation, but for the most part you will be using either the `dbGetQuery()` or `dbReadTable()` function.
 
-## Reading Flat Files
+### Reading Flat Files
+
+For flat files, `readr` will do well for most CSV's and other basic file formats, `readxl` is best for excel documents, `jsonlite` is ideal for JSON documents, and `xml2` will do if you have the unfortunate circumstance of dealing with that format.
 
 ```{r}
-
+require(readr)
+require(readxl)
+require(jsonlite)
+require(xml2)
 ```
 
-## Data Visualizations
+### Spatial Data
+
+The easiest method for reading data and mapping in either `ggplot2`, `ggmap` or `leaflet` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+
+```{r sf}
+require(sf)
+
+munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
+
+plot(munis)
+```
+
+#### Census Data
+
+The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
+
+```{r tidycensus}
+require(tidycensus)
+
+census_api_key(Sys.getenv("census"))
+
+v19 <- load_variables(2019, "acs5", cache = TRUE)
+
+alco_muni_pop <- get_acs("county subdivision", state = 'PA', county = 'Allegheny', year = 2019, variables = 'B01003_001', geometry = T)
+```
+
+## Charts and Graphs
 
 The easiest package for quickly creating charts and graphs in R is [ggplot2](https://ggplot2.tidyverse.org/). Once of the best resources for ggplot2 visualizations is the [Topic 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) from Selva Prabhakaran. This includes full code and examples using you can access directly from R. This site also has a good introduction to ggplot2 if you find the one from RStudio insufficient.
 
@@ -94,7 +127,7 @@ ggplotly(g) %>%
 
 Note that not all of the labels translate, [subtitles](https://datascott.com/blog/subtitles-with-ggplotly/) and [captions](https://stackoverflow.com/questions/45103559/plotly-adding-a-source-or-caption-to-a-chart) are lost and have to be added through other methods.
 
-## Colors
+### Colors
 
 A great resource for color palettes is [colorbrewer](https://colorbrewer2.org/), which is easy to implement in [ggplot2](https://statisticsglobe.com/scale-colour-fill-brewer-rcolorbrewer-package-r).
 
@@ -106,7 +139,7 @@ g + scale_fill_brewer(palette = "Spectral")
 
 The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
 
-#### DT
+### DT
 
 DT has extensive [documentation](https://rstudio.github.io/DT/) showing its features. Below is the standard format for a CountyStat DT table. One of the biggest benefits to this package is the [horizontal scroll option](https://stackoverflow.com/questions/30765338/how-to-make-the-horizontal-scrollbar-visible-in-dtdatatable) and [download button](https://rstudio.github.io/DT/extensions.html) feature.
 
@@ -130,7 +163,7 @@ datatable(iris,
           )
 ```
 
-#### kable w/ kableExtra
+### kable w/ kableExtra
 
 Use the [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables. Like the `DT()` example above a standard CountyStat format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
 
@@ -144,37 +177,9 @@ iris %>%
   row_spec(0, bold = T, background = "#008080", color = "white")
 ```
 
-# Maps and Spatial Data
+## Mapping
 
-## Reading Data
-
-The easiest method for reading data and mapping in either `ggplot2`, `ggmap` or `leaflet` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
-
-```{r sf}
-require(sf)
-
-munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
-
-plot(munis)
-```
-
-#### Census Data
-
-The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
-
-```{r tidycensus}
-require(tidycensus)
-
-census_api_key(Sys.getenv("census"))
-
-v19 <- load_variables(2019, "acs5", cache = TRUE)
-
-alco_muni_pop <- get_acs("county subdivision", state = 'PA', county = 'Allegheny', year = 2019, variables = 'B01003_001', geometry = T)
-```
-
-### Mapping
-
-#### leaflet
+### leaflet
 
 The most versatile mapping application for HTML Rmarkdown is [leaflet](https://rstudio.github.io/leaflet/). It can map polygons, points, lines and more. The CountyStat team typically will use the `Stamen.Toner` base map, as it provides the least conflict with color schemes. As with `ggplot2` the `colorbrewer` palettes are integrated and highly recommended.
 
@@ -202,20 +207,48 @@ leaflet(alco_muni_pop) %>%
   )
 ```
 
-#### ggmap
+### ggplot2 map
 
-[ggmap](https://github.com/dkahle/ggmap) works if you are not trying to have interactive elements. Like leaflet the `Stamen.Toner` base map is suggested. You can use `plotly` on a typical `geom_sf`, but in most cases `leaflet` is a better option.
+If you don't necessarily need interactivity or a base map you can just use `ggplot2`. 
+
+```{r ggplot2_map}
+require(ggthemes)
+
+m <- ggplot(data = alco_muni_pop, aes(fill = estimate)) +
+  geom_sf() +
+  theme_map() +
+  labs(title = "Population by Municipality",
+       subtitle = "Allegheny County",
+       caption = "ACS 2019 Estimate") +
+  scale_fill_gradient(low = '#efedf5', high = '#3f007d')
+
+m
+```
+### ggplotly map
+
+To add interactivity you can use `plotly` on a typical `geom_sf`, but in most cases `leaflet` is a better option to achieve this effect.
+
+```{r plotly_map}
+ggplotly(m)
+```
+
+### ggmap
+
+[ggmap](https://github.com/dkahle/ggmap) works if you are not trying to have interactive elements but want to add a base map for context. As with leaflet the `Stamen.Toner` base map is suggested. 
 
 ```{r ggmap}
 require(ggmap)
-require(ggthemes)
 
-bbox <- st_bbox(munis)
+# Format 
+bbox <- st_bbox(alco_muni_pop)
 bbox_trans <- c(left = bbox[[1]], bottom = bbox[[2]], right = bbox[[3]], top = bbox[[4]])
 
 get_stamenmap(bbox_trans, maptype = "toner-lite") %>% 
   ggmap() +
-  theme_map() +
-  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE) +
+  theme_map() + 
+  labs(title = "Population by Municipality",
+       subtitle = "Allegheny County",
+       caption = "ACS 2019 Estimate") +
+  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE, alpha = .75) +
   scale_fill_gradient(low = '#efedf5', high = '#3f007d')
 ```

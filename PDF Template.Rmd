@@ -6,7 +6,7 @@ date: "  \n`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York'
 output:
   pdf_document:
     toc: true
-    toc_depth: 1
+    toc_depth: 3
     extra_dependencies: ["float"]
     fig_crop: no
 urlcolor: blue
@@ -89,7 +89,38 @@ require(jsonlite)
 require(xml2)
 ```
 
-## Data Visualizations
+### Spatial Data
+
+The easiest method for reading data and mapping in either `ggplot2` or `ggmap` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+
+```{r sf}
+require(sf)
+
+munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
+
+plot(munis)
+```
+
+### Census Data
+
+The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
+
+```{r tidycensus}
+require(tidycensus)
+
+census_api_key(Sys.getenv("census"))
+
+v19 <- load_variables(2019, "acs5", cache = TRUE)
+
+alco_muni_pop <- get_acs("county subdivision", 
+                         state = 'PA',
+                         county = 'Allegheny',
+                         year = 2019, 
+                         variables = 'B01003_001', 
+                         geometry = T) # Includes geometry column for mapping
+```
+
+## Charts and Graphs
 
 The easiest package for quickly creating charts and graphs in R is [ggplot2](https://ggplot2.tidyverse.org/). Once of the best resources for ggplot2 visualizations is the [Topic 50 ggplot2 Visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html) from Selva Prabhakaran. This includes full code and examples using you can access directly from R. This site also has a good introduction to ggplot2 if you find the one from RStudio insufficient.
 
@@ -115,12 +146,9 @@ g + scale_fill_brewer(palette = "Spectral")
 
 ## Tables
 
-The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
+The best function for PDF table `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
 
-
-### kable w/ kableExtra
-
-For PDF's [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables are your best bet. Below is a standard CountyStat format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
+The [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package greatly expands the options you have to format your `kable()` tables. Below is the standard CountyStat format, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey the message you are trying to deliver to your audience.
 
 ```{r kable}
 require(kableExtra)
@@ -128,41 +156,31 @@ require(kableExtra)
 iris %>%
   sample_n(15) %>% # Select 15 random rows
   kbl(caption = "Fisher's or Anderson's") %>%
-  kable_styling(font_size = 12) %>%
+  kable_styling(font_size = 12, latex_options = "HOLD_position") %>%
   row_spec(0, bold = T, background = "#008080", color = "white")
 ```
 
-# Maps and Spatial Data
+# Mapping
 
-### Reading Data
+### ggplot2 map
 
-The easiest method for reading data and mapping in either `ggplot2`, `ggmap` or `leaflet` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+If you don't need a base map because the shapefile contains enough information for your audience about location you can just use `ggplot2`. 
 
-```{r sf}
-require(sf)
+```{r ggplot2_map}
+require(ggthemes)
 
-munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
-
-plot(munis)
-```
-
-### Census Data
-
-The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
-
-```{r tidycensus}
-require(tidycensus)
-
-census_api_key(Sys.getenv("census"))
-
-v19 <- load_variables(2019, "acs5", cache = TRUE)
-
-alco_muni_pop <- get_acs("county subdivision", state = 'PA', county = 'Allegheny', year = 2019, variables = 'B01003_001', geometry = T)
+ggplot(data = alco_muni_pop, aes(fill = estimate)) +
+  geom_sf() +
+  theme_map() +
+  labs(title = "Population by Municipality",
+       subtitle = "Allegheny County",
+       caption = "ACS 2019 Estimate") +
+  scale_fill_gradient(low = '#efedf5', high = '#3f007d')
 ```
 
 ### ggmap
 
-[ggmap](https://github.com/dkahle/ggmap) works if you are not trying to have interactive elements. Like leaflet the `Stamen.Toner` base map is suggested. You can use `plotly` on a typical `geom_sf`, but in most cases `leaflet` is a better option.
+[ggmap](https://github.com/dkahle/ggmap) works if you need to include a base map for context. Like leaflet the `Stamen.Toner` base map is suggested.
 
 ```{r ggmap}
 require(ggmap)
@@ -173,7 +191,10 @@ bbox_trans <- c(left = bbox[[1]], bottom = bbox[[2]], right = bbox[[3]], top = b
 
 get_stamenmap(bbox_trans, maptype = "toner-lite") %>% 
   ggmap() +
-  theme_map() +
-  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE) +
+  theme_map() + 
+  labs(title = "Population by Municipality",
+       subtitle = "Allegheny County",
+       caption = "ACS 2019 Estimate") +
+  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE, alpha = .75) +
   scale_fill_gradient(low = '#efedf5', high = '#3f007d')
 ```
