@@ -160,7 +160,7 @@ iris %>%
   row_spec(0, bold = T, background = "#008080", color = "white")
 ```
 
-# Mapping
+## Mapping
 
 ### ggplot2 map
 
