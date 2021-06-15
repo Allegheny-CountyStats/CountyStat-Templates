@@ -32,6 +32,7 @@ For many of the basics in [RMarkdown](https://rmarkdown.rstudio.com/index.html) 
 
 ```{r dbi, eval = FALSE}
 require(DBI)
+
 wh_host <- Sys.getenv('WH_HOST')
 wh_db <- Sys.getenv('WH_DB')
 wh_user <- Sys.getenv('WH_USER')
@@ -143,4 +144,78 @@ iris %>%
   row_spec(0, bold = T, background = "#008080", color = "white")
 ```
 
-## Maps and Spatial Data
+# Maps and Spatial Data
+
+## Reading Data
+
+The easiest method for reading data and mapping in either `ggplot2`, `ggmap` or `leaflet` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+
+```{r sf}
+require(sf)
+
+munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
+
+plot(munis)
+```
+
+#### Census Data
+
+The easiest way to use the Census API in R is with the [tidycensus](https://walker-data.com/tidycensus/) package. First you have to [sign-up](http://api.census.gov/data/key_signup.html) for an api key, but its a free and easy process.
+
+```{r tidycensus}
+require(tidycensus)
+
+census_api_key(Sys.getenv("census"))
+
+v19 <- load_variables(2019, "acs5", cache = TRUE)
+
+alco_muni_pop <- get_acs("county subdivision", state = 'PA', county = 'Allegheny', year = 2019, variables = 'B01003_001', geometry = T)
+```
+
+### Mapping
+
+#### leaflet
+
+The most versatile mapping application for HTML Rmarkdown is [leaflet](https://rstudio.github.io/leaflet/). It can map polygons, points, lines and more. The CountyStat team typically will use the `Stamen.Toner` base map, as it provides the least conflict with color schemes. As with `ggplot2` the `colorbrewer` palettes are integrated and highly recommended.
+
+```{r leaflet}
+require(leaflet)
+
+alco_muni_pop <- alco_muni_pop %>%
+  mutate(NAME = gsub(", Allegheny County, Pennsylvania", "", NAME),
+         NAME = tools::toTitleCase(NAME))
+
+pal <- colorBin("YlOrRd", bins = c(0, 1000, 5000, 10000, 25000, 50000, 100000, max(alco_muni_pop$estimate)), alco_muni_pop$estimate)
+
+leaflet(alco_muni_pop) %>% 
+  addProviderTiles(providers$Stamen.Toner) %>%
+  addPolygons(color = "#444444", weight = 1, smoothFactor = 0.5,
+    opacity = 1.0, fillOpacity = 0.5,
+    popup = ~paste("<b>Name:</b>", NAME,
+                   "<br><b>Est. Population:</b>", prettyNum(estimate, big.mark = ",")),
+    fillColor = ~pal(estimate),
+    highlightOptions = highlightOptions(color = "white", weight = 2,
+      bringToFront = TRUE)) %>%
+  addLegend("bottomright", pal = pal, values = ~estimate,
+    title = "Est. Pop (2019 ACS)",
+    opacity = 1
+  )
+```
+
+#### ggmap
+
+[ggmap](https://github.com/dkahle/ggmap) works if you are not trying to have interactive elements. Like leaflet the `Stamen.Toner` base map is suggested. You can use `plotly` on a typical `geom_sf`, but in most cases `leaflet` is a better option.
+
+```{r ggmap}
+require(ggmap)
+require(ggthemes)
+
+bbox <- st_bbox(munis)
+bbox_trans <- c(left = bbox[[1]], bottom = bbox[[2]], right = bbox[[3]], top = bbox[[4]])
+
+get_stamenmap(bbox_trans, maptype = "toner-lite") %>% 
+  ggmap() +
+  theme_map() +
+  geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE) +
+  scale_fill_gradient(low = '#efedf5', high = '#3f007d')
+```
