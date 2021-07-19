@@ -198,3 +198,24 @@ get_stamenmap(bbox_trans, maptype = "toner-lite") %>%
   geom_sf(data = alco_muni_pop, aes(fill = estimate), inherit.aes = FALSE, alpha = .75) +
   scale_fill_gradient(low = '#efedf5', high = '#3f007d')
 ```
+
+\blandscape
+## Landscaped Pages
+
+Sometimes a horizontal page is insufficient for the type of plot you are trying to provide to users. In these instances using the `lscape` Latex package allows you to flip the pages between the `\blandscape` and `\elandscape` commands. You will want to play around with the `fig.width` and `fig.height` for these figures to get the best settings for your plot.
+
+This command is best for when you need to switch the orientation back and forth during the report. If your report will be in a landscape format throughout the document just add `classoption: landscape` in the YAML header.
+
+```{r wide, fig.width=14, fig.height=5}
+ggplot(mpg, aes(x = cty, y = hwy, colour = manufacturer)) +
+  geom_point() +
+  labs(title = "Highway vs City MPG by Manufacturer",
+       x = "City MPG",
+       y = "Highway MPG",
+       caption = "EPA Fuel Economy 1999-2008",
+       colour = "Manufacturer") +
+  theme_bw()
+```
+
+\elandscape
+\newpage
