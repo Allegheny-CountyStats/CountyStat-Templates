@@ -2,7 +2,7 @@
 title: "HTML Template"
 subtitle: ""
 author: "Analyst Name"
-date: "6/14/2021"
+date: "  \nRan on: `r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')`"
 output:
   html_document:
     toc: true
@@ -10,16 +10,21 @@ output:
     toc_depth: 2
 ---
 
+<!-- Header script --> 
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"./images/CountyStat_Logo_Large.png\" style=\"float: right;width: 175px;\"/>')
+   });
+</script>
+
+
 ```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
 
 # Load your libraries and data here
 require(dplyr)
 require(tidyr)
-```
-
-```{r logo, out.width= '50%', fig.align='center', echo=FALSE}
-knitr::include_graphics("./images/CountyStat_Logo_Large.png")
 ```
 
 # Getting Started
