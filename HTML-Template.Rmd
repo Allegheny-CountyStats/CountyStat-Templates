@@ -6,6 +6,8 @@ date: "  \nRan on: `r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/N
 output:
   html_document:
     toc: true
+    toc_float: 
+      toc_collapsed: false
     theme: flatly
     toc_depth: 2
 ---
@@ -18,6 +20,20 @@ output:
    });
 </script>
 
+<!-- Wider contents --> 
+<style type="text/css">
+.main-container {
+  max-width: 1250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#TOC {
+  position: fixed;
+  left: 30px;
+  max-width: 300px;
+  overflow: auto;
+}
+</style>
 
 ```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
@@ -30,6 +46,12 @@ require(tidyr)
 # Getting Started
 
 For many of the basics in [RMarkdown](https://rmarkdown.rstudio.com/index.html) the RStudio introduction is very worth while. Almost every R visualization output is compatible with it.
+
+## Table of Contents:
+  
+A floating table of contents for HTML documents is preferred for longer analysis. This allows the reader to go between sections easily without having to scroll back to the top of the document. The template also includes some slight changes to the markdown output format to make the most use of the reader's screen, but recognize that floating TOC is neither Mobile friendly (nobody should really be viewing on a phone anyway) nor very good on screens smaller than 1000 pixels in width.
+
+A `toc_depth` of two is preferred, this means that any section that starts with either one or two `#`'s will appear. Other markdown headers will function, they are just omitted from the table of contents.
 
 # Common Standards
 
