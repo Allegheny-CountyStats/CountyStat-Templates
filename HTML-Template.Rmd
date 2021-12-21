@@ -36,7 +36,7 @@ output:
 </style>
 
 ```{r setup, include=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, out.width="100%") # Switch this to FALSE to hide code to those who will be consuming your report
 
 # Load your libraries and data here
 require(dplyr)
