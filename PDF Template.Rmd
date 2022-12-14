@@ -28,15 +28,16 @@ header-includes:
   - \newcommand{\blandscape}{\begin{landscape}}
   - \newcommand{\elandscape}{\end{landscape}}
 ---
-<!-- This is the header content --> 
+<!--Custom Header Content-->
+```{=tex}
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\textbf{CountyStat PDF Template}}
-\rhead{`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')` $\>$ \includegraphics[height=1.2cm]{./images/NewCountyLogo_TransBG-01.png}}
-\chead{\thepage}
-<!-- No header on TOC page --> 
-\thispagestyle{empty}
+\rhead{`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')`
+\includegraphics[height=1.2cm]{./images/NewCountyLogo_TransBG-01.png}} 
+\thispagestyle{empty} 
 \newpage
+```
 
 ```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE) # Switch this to FALSE to hide code to those who will be consuming your report
@@ -93,12 +94,13 @@ require(xml2)
 
 ### Spatial Data
 
-The easiest method for reading data and mapping in either `ggplot2` or `ggmap` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
+The easiest method for reading data and mapping in either `ggplot2` or `ggmap` is the [sf](https://r-spatial.github.io/sf/) package. When looking for a spatial dataset, the first option is always what is available from the County ESRI team on their [GIS Open Data site](https://openac-alcogis.opendata.arcgis.com/). If you can't find what you are looking for, and it is something you think the County should have access to email their team at [GISHelp\@AlleghenyCounty.US](mailto:GISHelp@AlleghenyCounty.US).
 
 ```{r sf}
 require(sf)
+require(httr)
 
-munis <- read_sf('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson')
+munis <- read_sf(content(GET('https://opendata.arcgis.com/datasets/9de0e9c07af04e638dbc9cb9070962c2_0.geojson'), "text"))
 
 plot(munis)
 ```
@@ -152,19 +154,50 @@ The best function for PDF table `kable()`. CountyStat has a standard table forma
 
 ```{r kable}
 require(kableExtra)
+library(palmerpenguins)
 
-iris %>%
+select(penguins, 1:5) %>%
   sample_n(15) %>% # Select 15 random rows
-  kbl(caption = "Fisher's or Anderson's") %>%
+  kbl(caption = "Palmer Archipelago") %>%
   kable_styling(font_size = 12, latex_options = "HOLD_position") %>%
-  row_spec(0, bold = T, background = "#008080", color = "white")
+  row_spec(0, bold = T, background = "#008080", color = "white") # Special formatting for the top row of the table
 ```
+
+## Two Column Content
+
+\btwocol
+
+Sometimes you may want to include content next to other content. For example, say you want an explanation of the chart on the right. You could put that text between `\btwocol` and a `\columnbreak` for the content that goes on the right. To go back to normal page setups add a line with `\etwocol`. You can put anything on either side of the content. The code for the plot on the right is echoed to make the PDF render more true to form.
+
+\columnbreak
+
+```{r twocol_plot, echo=FALSE}
+ggplot(data = penguins, 
+                       aes(x = flipper_length_mm,
+                           y = body_mass_g)) +
+  geom_point(aes(color = species, 
+                 shape = species),
+             size = 3,
+             alpha = 0.8) +
+  scale_color_manual(values = c("darkorange","purple","cyan4")) +
+  labs(title = "Penguin size, Palmer Station LTER",
+       x = "Flipper length (mm)",
+       y = "Body mass (g)",
+       color = "Penguin species",
+       shape = "Penguin species") +
+  theme(legend.position = c(0.2, 0.7),
+        plot.title.position = "plot",
+        plot.caption = element_text(hjust = 0, face= "italic"),
+        plot.caption.position = "plot")
+```
+
+\etwocol
 
 ## Mapping
 
 ### ggplot2 map
 
-If you don't need a base map because the shapefile contains enough information for your audience about location you can just use `ggplot2`. 
+If you don't need a base map because the shapefile contains enough information for your audience about location you can just use `ggplot2`.
 
 ```{r ggplot2_map}
 require(ggthemes)
@@ -200,6 +233,7 @@ get_stamenmap(bbox_trans, maptype = "toner-lite") %>%
 ```
 
 \blandscape
+
 ## Landscaped Pages
 
 Sometimes a horizontal page is insufficient for the type of plot you are trying to provide to users. In these instances using the `lscape` Latex package allows you to flip the pages between the `\blandscape` and `\elandscape` commands. You will want to play around with the `fig.width` and `fig.height` for these figures to get the best settings for your plot.
@@ -217,5 +251,7 @@ ggplot(mpg, aes(x = cty, y = hwy, colour = manufacturer)) +
   theme_bw()
 ```
 
+```{=tex}
 \elandscape
 \newpage
+```
