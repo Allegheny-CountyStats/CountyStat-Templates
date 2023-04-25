@@ -27,6 +27,7 @@ header-includes:
   - \usepackage{lscape}
   - \newcommand{\blandscape}{\begin{landscape}}
   - \newcommand{\elandscape}{\end{landscape}}
+  - \usepackage{lastpage}
 ---
 <!--Custom Header Content-->
 ```{=tex}
@@ -35,6 +36,8 @@ header-includes:
 \lhead{\textbf{CountyStat PDF Template}}
 \rhead{`r format(Sys.time(), '%a %B %d, %Y %I:%M %p', tz ='America/New_York')`
 \includegraphics[height=1.2cm]{./images/NewCountyLogo_TransBG-01.png}} 
+\fancyfoot[C]{\footnotesize Page \thepage\, of\, \pageref*{LastPage}}
+\setlength\footskip{0pt}
 \thispagestyle{empty} 
 \newpage
 ```
