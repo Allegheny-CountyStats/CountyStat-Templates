@@ -64,11 +64,13 @@ require(DBI)
 
 wh_host <- Sys.getenv('WH_HOST')
 wh_db <- Sys.getenv('WH_DB')
-wh_user <- Sys.getenv('WH_USER')
-wh_pass <- Sys.getenv('WH_PASS')
 
 # Connect to the PanDA DataWarehouse
-wh_con <- dbConnect(odbc::odbc(), driver = "{ODBC Driver 17 for SQL Server}", server = wh_host, database = wh_db, UID = wh_user, pwd = wh_pass, Trusted_Connection= "yes")
+wh_con <- dbConnect(odbc::odbc(), 
+                    driver = "{ODBC Driver 17 for SQL Server}", 
+                    server = wh_host, 
+                    database = wh_db, 
+                    Trusted_Connection= "yes")
 ```
 
 Always keep your credentials for the DataWarehouse in an `.env` file. An example is in this repo, but in normal circumstances this file should be in the `.gitignore` file.
