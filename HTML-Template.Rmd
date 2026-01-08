@@ -67,7 +67,7 @@ wh_db <- Sys.getenv('WH_DB')
 wh_user <- Sys.getenv('WH_USER')
 wh_pass <- Sys.getenv('WH_PASS')
 
-# Connect to the CountyStat DataWarehouse
+# Connect to the PanDA DataWarehouse
 wh_con <- dbConnect(odbc::odbc(), driver = "{ODBC Driver 17 for SQL Server}", server = wh_host, database = wh_db, UID = wh_user, pwd = wh_pass, Trusted_Connection= "yes")
 ```
 
@@ -164,11 +164,11 @@ g + scale_fill_brewer(palette = "Spectral")
 
 ## Tables
 
-The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. CountyStat has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
+The best functions for tables are `DT()` and `kable()`. The best option will depend on the number of rows and situation you find yourself in. Both of these functions allow for a wide amount of customization and formating. Performance and Data Analytics (PanDA) has a standard table format to start with, however Analysts should feel free to check out the documentation for both packages especially when looking to format the rows to highlight certain values or increase readability, or improve other functions.
 
 ### DT
 
-DT has extensive [documentation](https://rstudio.github.io/DT/) showing its features. Below is the standard format for a CountyStat DT table. One of the biggest benefits to this package is the [horizontal scroll option](https://stackoverflow.com/questions/30765338/how-to-make-the-horizontal-scrollbar-visible-in-dtdatatable) and [download button](https://rstudio.github.io/DT/extensions.html) feature.
+DT has extensive [documentation](https://rstudio.github.io/DT/) showing its features. Below is the standard format for a PanDA DT table. One of the biggest benefits to this package is the [horizontal scroll option](https://stackoverflow.com/questions/30765338/how-to-make-the-horizontal-scrollbar-visible-in-dtdatatable) and [download button](https://rstudio.github.io/DT/extensions.html) feature.
 
 ```{r DT}
 require(DT)
@@ -192,7 +192,7 @@ datatable(iris,
 
 ### kable w/ kableExtra
 
-Use the [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables. Like the `DT()` example above a standard CountyStat format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
+Use the [kableExtra](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html) package to format your `kable()` tables. Like the `DT()` example above a standard PanDA format is available below, but Analysts should feel free to use the wide variety of features the `kableExtra` library provides to improve readability and convey a message.
 
 ```{r kable}
 require(kableExtra)
@@ -208,7 +208,7 @@ iris %>%
 
 ### leaflet
 
-The most versatile mapping application for HTML Rmarkdown is [leaflet](https://rstudio.github.io/leaflet/). It can map polygons, points, lines and more. The CountyStat team typically will use the `Stamen.Toner` base map, as it provides the least conflict with color schemes. As with `ggplot2` the `colorbrewer` palettes are integrated and highly recommended.
+The most versatile mapping application for HTML Rmarkdown is [leaflet](https://rstudio.github.io/leaflet/). It can map polygons, points, lines and more. The PanDA team typically will use the `Stamen.Toner` base map, as it provides the least conflict with color schemes. As with `ggplot2` the `colorbrewer` palettes are integrated and highly recommended.
 
 ```{r leaflet}
 require(leaflet)
